@@ -1,0 +1,15 @@
+{
+    "code": "cupnoodles.contactforms",
+    "name": "Contact Forms",
+    "description": "Framework to allow multiple types of contact forms.",
+    "version": "v1.0.0",
+    "author": "CupNoodles",
+    "icon": {
+      "class": "fa fa-envelope",
+      "backgroundColor": "#1B294B",
+      "color": "#fff"
+    },
+    "homepage": "",
+    "require": {
+    }
+  }
