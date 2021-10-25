@@ -6,7 +6,7 @@ Email:
 {email_address}
 
 Message:
-{message}
+{contact_message}
 
 Date Requested:
 {date_requested}
@@ -19,7 +19,7 @@ Email:
 {email_address}
 
 Message:
-{message}
+{contact_message}
 
 Date Requested:
 {date_requested}

@@ -90,7 +90,7 @@ class ContactForm extends BaseComponent
 
 
         // TOOD this should be an editable field in each custom contact form.
-        $filter_keys = ['first_name', 'last_name', 'email_address', 'message', 'date_requested'];
+        $filter_keys = ['first_name', 'last_name', 'email_address', 'contact_message', 'date_requested'];
         $postdata = post();
         foreach($postdata as $key=>$value){
             if(in_array($key, $filter_keys)){
@@ -99,6 +99,7 @@ class ContactForm extends BaseComponent
         }
 
         $data['subject'] = $model->subject;
+
         return $data;
 
     }
