@@ -5,6 +5,9 @@ New Contact Form submission from {first_name} {last_name}
 Email: 
 {email_address}
 
+Email: 
+{phone_number}
+
 Message:
 {contact_message}
 
@@ -17,6 +20,9 @@ New Contact Form submission from {first_name} {last_name}
 
 Email: 
 {email_address}
+
+Message:
+{phone_number}
 
 Message:
 {contact_message}
