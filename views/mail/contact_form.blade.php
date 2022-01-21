@@ -5,7 +5,7 @@ New Contact Form submission from {first_name} {last_name}
 Email: 
 {email_address}
 
-Email: 
+Phone Number: 
 {phone_number}
 
 Message:
@@ -21,7 +21,7 @@ New Contact Form submission from {first_name} {last_name}
 Email: 
 {email_address}
 
-Message:
+Phone Number:
 {phone_number}
 
 Message:
