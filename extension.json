@@ -11,5 +11,6 @@
     },
     "homepage": "",
     "require": {
+      "igniter.frontend" : "*"
     }
   }
