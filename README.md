@@ -1,6 +1,8 @@
-## Contact Forms Extension
+## WIP - Contact Forms Extension 
 
 HTML-based Contact forms for TastyIgniter. This extension does not come with a Form Builder or editor, and rather relies on each user creating an html template for each contact form - if you're looking for a form builder, there's a paid extension at https://tastyigniter.com/marketplace/item/concreta-formbuilder which may suit your needs much better.
+
+This is also very much not feature-complete! Please use this extension as inspiration only for your own TI installations - it's very unlikely that this will be useful for you out-of-the-box. 
 
 
 ## Installation
@@ -70,8 +72,15 @@ An example html contact form may look like
 </div>
 ```
 
-Then include the component into your template with 
+Then include the component into your template with first the component declaration
 
 ```
-@component('my_contact_form_slug')
+'[CupNoodles\ContactForms\Components\ContactForm myContactForm]':
+    slug: my_contact_form_slug
 ```
+and then call the component in your template like 
+
+```
+@component('myContactForm')
+```
+
