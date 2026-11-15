@@ -1,86 +1,109 @@
-## WIP - Contact Forms Extension 
+# Contact Forms for TastyIgniter
 
-HTML-based Contact forms for TastyIgniter. This extension does not come with a Form Builder or editor, and rather relies on each user creating an html template for each contact form - if you're looking for a form builder, there's a paid extension at https://tastyigniter.com/marketplace/item/concreta-formbuilder which may suit your needs much better.
+Build as many contact forms as you need (catering requests, event enquiries, feedback, job applications)
+from the admin, with no HTML required. Each form emails the people you choose, keeps a copy of every
+message in the admin, and can offer a newsletter sign-up.
 
-This is also very much not feature-complete! Please use this extension as inspiration only for your own TI installations - it's very unlikely that this will be useful for you out-of-the-box. 
+TastyIgniter v4 ships with one fixed "Contact us" form that always goes to the site email address. Use
+this extension when you need different questions, several forms, or messages routed to different people.
 
+> Using TastyIgniter v3? Use the [`v3` branch](https://github.com/CupNoodles/ti-ext-contactforms/tree/v3). Note that the v3 version is much less feature-complete (explained in the v3 README).
+
+## Features
+
+- **Form builder in the admin**: add, reorder and remove fields. Field types are short text, email,
+  phone number, number, date, time, long text, dropdown, multiple choice and checkbox. Each field can
+  be required, half or full width, and have a placeholder and hint text.
+- **Per-form recipients**: send each form to one or more addresses. Replies go straight to the visitor
+  (Reply-To is set from the form's Email field).
+- **Submissions inbox**: every message is saved under *Marketing > Form Submissions*, with filters by
+  form and date and a "Reply by email" button. You can switch this off per form.
+- **Spam protection**: a hidden honeypot field, a per-visitor hourly limit, and optional Google
+  reCAPTCHA (v2 checkbox, using the keys from the FrontEnd extension's reCaptcha settings).
+- **Newsletter opt-in**: an optional, unticked checkbox that adds the visitor to the FrontEnd
+  extension's subscribers (and Mailchimp, if configured).
+- **Clear feedback**: validation messages under each field, a "Sending…" state and a customisable
+  thank-you message, all without a page reload.
+- **Customisable email**: edit the *Contact form submission email to staff* template in
+  *Design > Mail templates*. It lists whatever fields the form has.
+
+## Requirements
+
+- TastyIgniter v4.5 or later
+- [FrontEnd extension](https://github.com/tastyigniter/ti-ext-frontend) (`igniter.frontend`, installed
+  with TastyIgniter by default)
 
 ## Installation
 
-Copy/clone this repository into `extensions/cupnoodles/contactforms`.
+```bash
+composer require cupnoodles/ti-ext-contactforms:^4.0
+php artisan igniter:up
+```
 
 ## Usage
 
-Create a new contact form and fill it with form fields that you'd like to have sent to the emali address set on the contact form. 
+1. Go to **Marketing > Contact Forms** and click **New**.
+2. Give the form a name, the address(es) to send to and an email subject.
+3. On the **Fields** tab, add your questions. Include an *Email* field so you can reply.
+4. On the **Settings** tab, set the button text, thank-you message, spam protection and newsletter
+   options.
+5. Add the form to your site:
+   - **Page builder**: in *Design > Themes*, open the page builder, add a **Contact form** block to
+     any page and choose your form.
+   - **Theme template**: add the component tag where the form should appear:
 
-The following variables are valid within a contact form:
+     ```blade
+     <livewire:cupnoodles-contactforms::contact-form form="catering-request" />
+     ```
 
-```
-'first_name'
-'last_name'
-'email_address'
-'contact_message'
-'date_requested'
-'phone_number'
-'subscribe_to_newsletter'
-```
+     `form` is the form's slug, shown on its edit screen.
 
-At a further date, these should be made editable within the contact form admin. 
+The form uses standard Bootstrap 5 classes, so it matches the Orange theme and most Bootstrap themes
+without extra CSS.
 
-An example html contact form may look like
+## For developers
 
-```
-<div class="row">
-    <div class="col-6">
-        <label for="sc-first-name">First Name</label>
-        <input id="sc-first-name" type="text" class="form-control" name="first_name" />
-    </div>
-    <div class="col-6">
-        <label for="sc-last-name">Last Name</label>
-        <input id="sc-last-name" type="text" class="form-control" name="last_name" />
-    </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <label for="sc-email-adress">Email Address</label>
-        <input id="sc-email-address" type="text" class="form-control" name="email_address" />
-    </div>
-</div>
-<div class="row">
-	<div class="col-12">
-    	<input type="checkbox" name="subscribe_to_newsletter" id="subscribe_to_newsletter" class="form-control" value="1" />
-        <label for="subscribe_to_newsletter">Subscribe to our newsletter (opt-out at any time)</label>
-    </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <label for="sc-phone">Phone Number</label>
-        <input id="sc-phone" type="text" class="form-control" name="phone_number" />
-    </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <label for="sc-contact-message">Message</label>
-        <textarea id="sc-contact-message" class="form-control" name="contact_message" ></textarea>
-    </div>
-</div>
-<div class="row">
-    <div class="col-12 col-sm-6">
-        <label for="sc-date-requested">Requested Date</label>
-        <input id="sc-date-requested" class="form-control" type="date" name="date_requested" />
-    </div>
-</div>
+After a submission is processed, the event `cupnoodles.contactforms.submitted` is dispatched with:
+
+- the `ContactForm` model,
+- an array of submitted values keyed by field key,
+- the saved `Submission` model, or `null` if storing is switched off.
+
+```php
+Event::listen('cupnoodles.contactforms.submitted', function ($form, array $values, $submission) {
+    if ($form->slug === 'catering-request') {
+        // e.g. push to a CRM
+    }
+});
 ```
 
-Then include the component into your template with first the component declaration
+Field keys are generated from the field labels. Set them explicitly in the admin if your code
+depends on them.
 
-```
-'[CupNoodles\ContactForms\Components\ContactForm myContactForm]':
-    slug: my_contact_form_slug
-```
-and then call the component in your template like 
+## Upgrading from v3
 
-```
-@component('myContactForm')
+Run `php artisan igniter:up`. Existing forms are converted automatically:
+
+- The fields v3 recognised (`first_name`, `last_name`, `email_address`, `phone_number`,
+  `contact_message`, `date_requested`) become builder fields, in the same order, using the
+  `<label for="…">` text from your HTML where it can be found.
+- A `subscribe_to_newsletter` checkbox becomes the *Offer newsletter sign-up* setting.
+- The "Email" setting becomes *Send to*.
+- Your original HTML is kept in the `legacy_form` database column for reference. It is no longer
+  rendered, so check each form's Fields tab after upgrading.
+- The v3 `[contactForm]` component is replaced by the Livewire component and page builder block
+  above. Update your theme templates.
+
+## Testing
+
+```bash
+composer install
+vendor/bin/pest
 ```
 
+Tests use [sampoyigi/testbench](https://github.com/sampoyigi/testbench). Copy `phpunit.xml.dist` to
+`phpunit.xml` and point it at an empty test database.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
