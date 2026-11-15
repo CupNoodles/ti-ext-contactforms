@@ -35,10 +35,38 @@ this extension when you need different questions, several forms, or messages rou
 
 ## Installation
 
+### From GitHub (git clone)
+
+From your TastyIgniter root folder, clone the extension into `extensions/cupnoodles/contactforms`. The
+folder name matters: TastyIgniter finds extensions at `extensions/<vendor>/<name>`.
+
 ```bash
-composer require cupnoodles/ti-ext-contactforms:^4.0
+git clone https://github.com/CupNoodles/ti-ext-contactforms.git extensions/cupnoodles/contactforms
 php artisan igniter:up
 ```
+
+`igniter:up` creates the extension's database tables. To update later:
+
+```bash
+cd extensions/cupnoodles/contactforms
+git pull
+cd ../../..
+php artisan igniter:up
+```
+
+### With Composer, from GitHub
+
+If you manage TastyIgniter with Composer, you can install straight from the GitHub repository
+without Packagist or the marketplace:
+
+```bash
+composer config repositories.cupnoodles-contactforms vcs https://github.com/CupNoodles/ti-ext-contactforms
+composer require cupnoodles/ti-ext-contactforms:dev-master
+php artisan igniter:up
+```
+
+Once a version is tagged, you can require `^4.0` instead of `dev-master`. Updates then come through
+`composer update`.
 
 ## Usage
 
